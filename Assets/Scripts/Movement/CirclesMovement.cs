@@ -14,15 +14,20 @@ namespace Movement
         public Quaternion _endRotation;
 
         private int _turnCount = 0;
+        private bool _enabled = true;
 
-        void Start()
+        private void Start()
         {
             _startRotation = transform.rotation;
             _endRotation = Quaternion.Euler(0, 180, 0) * _startRotation;
         }
 
-        void Update()
+        private void Update()
         {
+            if (!_enabled) {
+                return;
+            }
+            
             _timer += Time.deltaTime;
             if (_turning) {
                 float t = Mathf.Clamp01(_timer / _turnDuration);
@@ -47,6 +52,12 @@ namespace Movement
                 _timer = 0f;
                 _turnCount++;
             }
+        }
+
+        public bool Enabled
+        {
+            get => _enabled;
+            set => _enabled = value;
         }
     }
 }
